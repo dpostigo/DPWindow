@@ -27,6 +27,7 @@
     contentLayer.delegate = self;
     contentLayer.backgroundColor = [NSColor controlColor].CGColor;
 
+
     //    CALayer *roundedBg = [CALayer layer];
     //    [contentLayer insertSublayer: roundedBg atIndex: 0];
     //    [roundedBg superConstrain];
@@ -94,7 +95,6 @@
 #pragma mark Colors
 
 - (NSColor *) titleBarColor {
-    NSLog(@"self.titleBarLayer = %@", self.titleBarLayer);
     return [NSColor colorWithCGColor: self.titleBarLayer.backgroundColor];
 }
 
@@ -178,7 +178,7 @@
 
 
 - (CALayer *) ruleLayer {
-    CALayer *superlayer = backgroundLayer.superlayer;
+    //    CALayer *superlayer = backgroundLayer.superlayer;
 
     //    if (ret == nil) {
     //        ret = [CALayer layer];

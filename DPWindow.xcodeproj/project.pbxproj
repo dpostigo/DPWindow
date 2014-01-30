@@ -16,6 +16,7 @@
 		33C4CBED187DDC52008FB67E /* DPWindowTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C4CBEC187DDC52008FB67E /* DPWindowTests.m */; };
 		33C4CC38187DDC97008FB67E /* DPStyledWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = 33C4CC36187DDC97008FB67E /* DPStyledWindow.h */; };
 		33C4CC39187DDC97008FB67E /* DPStyledWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C4CC37187DDC97008FB67E /* DPStyledWindow.m */; };
+		773C6A2D183F4E96B1AF9930 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA8432FA5DAE4432B67F2460 /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		33C4CBEC187DDC52008FB67E /* DPWindowTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DPWindowTests.m; sourceTree = "<group>"; };
 		33C4CC36187DDC97008FB67E /* DPStyledWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DPStyledWindow.h; sourceTree = "<group>"; };
 		33C4CC37187DDC97008FB67E /* DPStyledWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DPStyledWindow.m; sourceTree = "<group>"; };
+		CA8432FA5DAE4432B67F2460 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +54,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				33C4CBD0187DDC52008FB67E /* Cocoa.framework in Frameworks */,
+				773C6A2D183F4E96B1AF9930 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +96,7 @@
 				33C4CBCF187DDC52008FB67E /* Cocoa.framework */,
 				33C4CBE0187DDC52008FB67E /* XCTest.framework */,
 				33C4CBD1187DDC52008FB67E /* Other Frameworks */,
+				CA8432FA5DAE4432B67F2460 /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -166,6 +170,7 @@
 				33C4CBC8187DDC52008FB67E /* Sources */,
 				33C4CBC9187DDC52008FB67E /* Frameworks */,
 				33C4CBCA187DDC52008FB67E /* Headers */,
+				766DB08594AD40688513DDE3 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -231,6 +236,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		766DB08594AD40688513DDE3 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		33C4CBC8187DDC52008FB67E /* Sources */ = {
@@ -413,6 +436,7 @@
 				33C4CBF2187DDC52008FB67E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		33C4CBF3187DDC52008FB67E /* Build configuration list for PBXNativeTarget "DPWindowTests" */ = {
 			isa = XCConfigurationList;
@@ -421,6 +445,7 @@
 				33C4CBF5187DDC52008FB67E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

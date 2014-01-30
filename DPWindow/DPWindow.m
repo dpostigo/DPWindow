@@ -9,8 +9,8 @@
 #import "CALayer+ConstraintUtils.h"
 #import "NSView+ConstraintGetters.h"
 #import "NSView+SuperConstraints.h"
-#import "TestView.h"
 #import "NSView+ConstraintModifiers.h"
+#import "NSWindow+DPKit.h"
 
 @implementation DPWindow
 
@@ -36,14 +36,46 @@
 
 - (void) awakeFromNib {
     [super awakeFromNib];
+    self.backgroundColor = [NSColor clearColor];
+//    [self setOpaque: NO];
 
-    [self setBackgroundColor: [NSColor clearColor]];
-    //    [self setOpaque: NO];
+    NSView *theme = self.windowThemeFrame;
+    theme.wantsLayer = YES;
+
+    if (windowView == nil) {
+        windowView = self.contentAsView;
+    }
+    windowView.wantsLayer = YES;
+
+    CALayer *layer = theme.layer;
+    layer.borderWidth = 0;
+    [layer makeSuperlayer];
+    [layer insertSublayer: self.backgroundLayer atIndex: 0];
+    [backgroundLayer superConstrainEdgesV: 0];
+    [backgroundLayer superConstrainEdgesH: 0.25];
+    //    themeLayer.backgroundColor = [NSColor clearColor].CGColor;
+    layer.delegate = self;
+
+    [self transferViews];
+
+    contentContentView.wantsLayer = YES;
+    [contentContentView.layer makeSuperlayer];
+
+    [self stylize];
+
+}
+
+- (void) oldAwakeFromNib {
+
+    self.backgroundColor = [NSColor clearColor];
+    [self setOpaque: NO];
 
     if (windowView == nil) windowView = self.contentAsView;
     windowView.wantsLayer = YES;
 
-    CALayer *themeLayer = self.themeFrame.layer;
+    NSView *theme = self.windowThemeFrame;
+
+    CALayer *themeLayer = self.windowThemeFrame.layer;
     themeLayer.borderWidth = 0;
     [themeLayer makeSuperlayer];
     [themeLayer insertSublayer: self.backgroundLayer atIndex: 0];
@@ -58,7 +90,6 @@
     [contentContentView.layer makeSuperlayer];
 
     [self stylize];
-
 }
 
 
@@ -77,7 +108,7 @@
     NSArray *constraints = [NSArray arrayWithArray: windowView.constraints];
 
 
-    TestView *contentView = [[TestView alloc] init];
+    NSView *contentView = [[NSView alloc] init];
     contentView.wantsLayer = YES;
     contentView.layer.delegate = self;
 
@@ -93,7 +124,7 @@
 
 
 - (NSColor *) windowBackgroundColor {
-    return [NSColor colorWithWhite: 0.1 alpha: 1.0];
+    return [NSColor colorWithDeviceWhite: 0.1 alpha: 1.0];
     //    return [NSColor colorWithWhite: 0.2 alpha: 1.0];
 }
 
@@ -102,12 +133,12 @@
 
 - (void) setTitleBarHeight: (CGFloat) titleBarHeight1 {
     titleBarHeight = titleBarHeight1;
-    [self updateConstraints];
+    [self updateConstraintsForViews];
 }
 
 - (void) setFooterBarHeight: (CGFloat) footerBarHeight1 {
     footerBarHeight = footerBarHeight1;
-    [self updateConstraints];
+    [self updateConstraintsForViews];
 }
 
 
@@ -126,7 +157,7 @@
         [contentContentView superConstrain: NSLayoutAttributeBottom constant: -self.hackInset];
         [contentContentView superConstrain: NSLayoutAttributeLeft constant: self.hackInset];
         [contentContentView superConstrain: NSLayoutAttributeRight constant: -self.hackInset];
-        [self updateConstraints];
+        [self updateConstraintsForViews];
     }
 }
 
@@ -137,7 +168,7 @@
 
 #pragma mark Constraints
 
-- (void) updateConstraints {
+- (void) updateConstraintsForViews {
     if (contentContentView) {
         NSLayoutConstraint *topConstraint = [windowView topConstraintForItem: contentContentView];
         topConstraint.constant = self.titleBarHeight - self.existingTitleBarHeight;
@@ -261,6 +292,7 @@
         titleBarLayer = [CALayer layer];
         titleBarLayer.delegate = self;
         titleBarLayer.backgroundColor = [NSColor clearColor].CGColor;
+        titleBarLayer.backgroundColor = [NSColor blueColor].CGColor;
     }
     return titleBarLayer;
 }
@@ -285,6 +317,7 @@
         backgroundLayer.backgroundColor = [NSColor clearColor].CGColor;
         backgroundLayer.borderColor = [NSColor blackColor].CGColor;
         backgroundLayer.delegate = self;
+
         [backgroundLayer makeSuperlayer];
 
         [backgroundLayer addSublayer: self.titleBarLayer];

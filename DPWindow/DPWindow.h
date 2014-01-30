@@ -26,12 +26,13 @@
 @property(nonatomic, strong) CALayer *titleBarLayer;
 @property(nonatomic, strong) CALayer *footerBarLayer;
 @property(nonatomic, strong) CALayer *backgroundLayer;
-
 @property(nonatomic, strong) NSView *contentContentView;
 
 - (void) stylize;
 - (CGFloat) hackInset;
+- (void) updateConstraintsForViews;
 - (void) updateConstraintsForLayers;
+- (CGFloat) existingTitleBarHeight;
 - (NSView *) contentAsView;
 - (NSView *) themeFrame;
 

@@ -5,6 +5,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DPWindow.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface DPStyledWindow : DPWindow {
     NSColor *shineColor;
@@ -13,6 +14,6 @@
 
 @property(nonatomic, strong) NSColor *titleBarColor;
 @property(nonatomic, strong) NSColor *footerBarColor;
-
 @property(nonatomic, strong) NSColor *shineColor;
+- (CAGradientLayer *) shineLayer;
 @end
