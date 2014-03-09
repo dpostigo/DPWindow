@@ -11,6 +11,7 @@
 #import "NSView+SuperConstraints.h"
 #import "NSView+ConstraintModifiers.h"
 #import "NSWindow+DPKit.h"
+#import "DPLayerDelegate.h"
 
 @implementation DPWindow
 
@@ -37,7 +38,7 @@
 - (void) awakeFromNib {
     [super awakeFromNib];
     self.backgroundColor = [NSColor clearColor];
-//    [self setOpaque: NO];
+    //    [self setOpaque: NO];
 
     NSView *theme = self.windowThemeFrame;
     theme.wantsLayer = YES;
@@ -54,7 +55,7 @@
     [backgroundLayer superConstrainEdgesV: 0];
     [backgroundLayer superConstrainEdgesH: 0.25];
     //    themeLayer.backgroundColor = [NSColor clearColor].CGColor;
-    layer.delegate = self;
+    layer.delegate = [DPLayerDelegate sharedDelegate];
 
     [self transferViews];
 
@@ -82,7 +83,7 @@
     [backgroundLayer superConstrainEdgesV: 0];
     [backgroundLayer superConstrainEdgesH: 0.25];
     //    themeLayer.backgroundColor = [NSColor clearColor].CGColor;
-    themeLayer.delegate = self;
+    themeLayer.delegate = [DPLayerDelegate sharedDelegate];;
 
     [self transferViews];
 
@@ -110,7 +111,7 @@
 
     NSView *contentView = [[NSView alloc] init];
     contentView.wantsLayer = YES;
-    contentView.layer.delegate = self;
+    contentView.layer.delegate = [DPLayerDelegate sharedDelegate];
 
     self.contentContentView = contentView;
 
@@ -125,7 +126,6 @@
 
 - (NSColor *) windowBackgroundColor {
     return [NSColor colorWithDeviceWhite: 0.1 alpha: 1.0];
-    //    return [NSColor colorWithWhite: 0.2 alpha: 1.0];
 }
 
 #pragma mark Setters
@@ -221,7 +221,7 @@
             topConstraint = [NSLayoutConstraint constraintWithItem: view attribute: NSLayoutAttributeTop relatedBy: NSLayoutRelationEqual toItem: view.superview attribute: NSLayoutAttributeTop multiplier: 1.0 constant: (self.titleBarHeight - view.frame.size.height) / 2];
             [superview addConstraint: topConstraint];
         }
-        topConstraint.constant = (self.titleBarHeight - view.frame.size.height) / 2;
+        topConstraint.constant = 7.0;
 
         NSLayoutConstraint *leftConstraint = [superview constraintForAttribute: NSLayoutAttributeLeading item: view attribute: NSLayoutAttributeLeading];
 
@@ -280,7 +280,7 @@
     titleBarLayer = titleBarLayer1;
 
     if (titleBarLayer) {
-        titleBarLayer.delegate = self;
+        titleBarLayer.delegate = [DPLayerDelegate sharedDelegate];
         [backgroundLayer insertSublayer: titleBarLayer1 atIndex: 0];
         [self updateConstraintsForLayers];
     }
@@ -290,7 +290,7 @@
 - (CALayer *) titleBarLayer {
     if (titleBarLayer == nil) {
         titleBarLayer = [CALayer layer];
-        titleBarLayer.delegate = self;
+        titleBarLayer.delegate = [DPLayerDelegate sharedDelegate];
         titleBarLayer.backgroundColor = [NSColor clearColor].CGColor;
         titleBarLayer.backgroundColor = [NSColor blueColor].CGColor;
     }
@@ -302,7 +302,7 @@
     if (footerBarLayer == nil) {
         footerBarLayer = [CALayer layer];
         //        footerBarLayer.backgroundColor = [NSColor redColor].CGColor;
-        footerBarLayer.delegate = self;
+        footerBarLayer.delegate = [DPLayerDelegate sharedDelegate];
         footerBarLayer.backgroundColor = [NSColor clearColor].CGColor;
     }
     return footerBarLayer;
@@ -316,7 +316,7 @@
         backgroundLayer.height = 30;
         backgroundLayer.backgroundColor = [NSColor clearColor].CGColor;
         backgroundLayer.borderColor = [NSColor blackColor].CGColor;
-        backgroundLayer.delegate = self;
+        backgroundLayer.delegate = [DPLayerDelegate sharedDelegate];
 
         [backgroundLayer makeSuperlayer];
 
@@ -340,6 +340,11 @@
 
 - (NSView *) themeFrame {
     return self.contentAsView.superview;
+}
+
+
+- (void) dealloc {
+
 }
 
 

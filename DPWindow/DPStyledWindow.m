@@ -9,6 +9,7 @@
 #import "DPStyledWindow.h"
 #import "CARoundedShapeLayer.h"
 #import "NSColor+BlendingUtils.h"
+#import "DPLayerDelegate.h"
 
 @implementation DPStyledWindow {
 
@@ -18,21 +19,41 @@
     [super stylize];
 
     CALayer *superlayer = backgroundLayer.superlayer;
-    superlayer.delegate = self;
+    superlayer.delegate = [DPLayerDelegate sharedDelegate];
     [superlayer makeSuperlayer];
 
     [self stylizeTitleBarLayer];
 
     CALayer *contentLayer = contentContentView.layer;
-    contentLayer.delegate = self;
+    contentLayer.delegate = [DPLayerDelegate sharedDelegate];;
     contentLayer.backgroundColor = [NSColor controlColor].CGColor;
 
+}
 
-    //    CALayer *roundedBg = [CALayer layer];
-    //    [contentLayer insertSublayer: roundedBg atIndex: 0];
-    //    [roundedBg superConstrain];
-    //    roundedBg.backgroundColor = [NSColor controlColor].CGColor;
-    //    roundedBg.delegate = self;
+- (void) stylizeFooterBarLayer {
+
+
+    CARoundedShapeLayer *roundedLayer2 = [CARoundedShapeLayer layer];
+    roundedLayer2.corners = AFCornerLowerLeft | AFCornerLowerRight;
+    roundedLayer2.radius = 4.5;
+    [self.footerBarLayer addSublayer: roundedLayer2];
+    [roundedLayer2 superConstrain];
+    footerBarLayer.mask = roundedLayer2;
+
+    CAGradientLayer *topShine = self.titleShineLayer;
+    if (topShine == nil) {
+        topShine = [CAGradientLayer layer];
+        topShine.name = @"titleShineLayer";
+        [titleBarLayer addSublayer: topShine];
+        topShine.delegate = [DPLayerDelegate sharedDelegate];;
+        [topShine superConstrain];
+    }
+
+    topShine.cornerRadius = backgroundLayer.cornerRadius;
+    topShine.colors = [NSArray arrayWithObjects:
+            (__bridge id) [NSColor colorWithDeviceWhite: 1.0 alpha: 0.5].CGColor,
+            (__bridge id) [NSColor blueColor].CGColor,
+            nil];
 
 }
 
@@ -47,18 +68,18 @@
     [roundedLayer2 superConstrain];
     titleBarLayer.mask = roundedLayer2;
 
-    titleBarLayer.backgroundColor = [NSColor colorWithWhite: 0.15 alpha: 1.0].CGColor;
-    titleBarLayer.backgroundColor = [NSColor colorWithWhite: 0.9 alpha: 1.0].CGColor;
+    titleBarLayer.backgroundColor = [NSColor colorWithDeviceWhite: 0.15 alpha: 1.0].CGColor;
+    titleBarLayer.backgroundColor = [NSColor colorWithDeviceWhite: 0.9 alpha: 1.0].CGColor;
     titleBarLayer.backgroundColor = [NSColor blueColor].CGColor;
     titleBarLayer.borderWidth = 0.5;
     [titleBarLayer makeSuperlayer];
 
-    CAGradientLayer *topShine = self.shineLayer;
+    CAGradientLayer *topShine = self.titleShineLayer;
     if (topShine == nil) {
         topShine = [CAGradientLayer layer];
-        topShine.name = @"shineLayer";
+        topShine.name = @"titleShineLayer";
         [titleBarLayer addSublayer: topShine];
-        topShine.delegate = self;
+        topShine.delegate = [DPLayerDelegate sharedDelegate];;
         [topShine superConstrain];
     }
 
@@ -67,7 +88,7 @@
     //    topShine.borderColor = [NSColor darkGrayColor].CGColor;
     //    topShine.borderWidth = 0.5;
     topShine.colors = [NSArray arrayWithObjects:
-            (__bridge id) [NSColor colorWithWhite: 1.0 alpha: 0.5].CGColor,
+            (__bridge id) [NSColor colorWithDeviceWhite: 1.0 alpha: 0.5].CGColor,
             (__bridge id) [NSColor blueColor].CGColor,
             nil];
 
@@ -75,7 +96,7 @@
     if (rule == nil) {
         rule = [CALayer layer];
         rule.name = @"rule";
-        rule.delegate = self;
+        rule.delegate = [DPLayerDelegate sharedDelegate];
         [backgroundLayer.superlayer addSublayer: rule];
         [rule superConstrainEdgesH: 0];
         [rule superConstrainBottomEdge: -titleBarHeight];
@@ -90,6 +111,14 @@
 
     self.titleBarColor = [NSColor lightGrayColor];
 }
+
+- (void) setFooterBarHeight: (CGFloat) footerBarHeight1 {
+    if (footerBarHeight1 > 0) {
+        [self stylizeFooterBarLayer];
+    }
+    [super setFooterBarHeight: footerBarHeight1];
+}
+
 
 
 #pragma mark Colors
@@ -108,13 +137,13 @@
 }
 
 - (void) setFooterBarColor: (NSColor *) footerBarColor {
-    footerBarLayer.backgroundColor = footerBarColor.CGColor;
+    self.footerBarLayer.backgroundColor = footerBarColor.CGColor;
 }
 
 
 - (NSColor *) shineColor {
     if (shineColor == nil) {
-        shineColor = [NSColor colorWithWhite: 1.0 alpha: 0.5];
+        shineColor = [NSColor colorWithDeviceWhite: 1.0 alpha: 0.5];
     }
     return shineColor;
 }
@@ -134,13 +163,19 @@
 
     titleBarLayer.borderColor = [NSColor darken: color amount: 0.1].CGColor;
 
-    CAGradientLayer *shine = self.shineLayer;
-    if (shine) {
-        shine.colors = [NSArray arrayWithObjects:
+    if (self.titleShineLayer) {
+        self.titleShineLayer.colors = [NSArray arrayWithObjects:
                 (__bridge id) self.shineColor.CGColor,
                 (__bridge id) titleBarLayer.backgroundColor,
                 nil];
 
+    }
+
+    if (self.footerShineLayer) {
+        self.footerShineLayer.colors = [NSArray arrayWithObjects:
+                (__bridge id) self.shineColor.CGColor,
+                (__bridge id) footerBarLayer.backgroundColor,
+                nil];
     }
 
 }
@@ -164,14 +199,26 @@
 
 #pragma mark Layer getters
 
-- (CAGradientLayer *) shineLayer {
-    CAGradientLayer *ret = (CAGradientLayer *) [titleBarLayer sublayerWithName: @"shineLayer"];
+- (CAGradientLayer *) titleShineLayer {
+    CAGradientLayer *ret = (CAGradientLayer *) [titleBarLayer sublayerWithName: @"titleShineLayer"];
     if (ret == nil) {
         ret = [CAGradientLayer layer];
-        ret.name = @"shineLayer";
+        ret.name = @"titleShineLayer";
         [titleBarLayer addSublayer: ret];
         [ret superConstrain];
-        ret.delegate = self;
+        ret.delegate = [DPLayerDelegate sharedDelegate];
+    }
+    return ret;
+}
+
+- (CAGradientLayer *) footerShineLayer {
+    CAGradientLayer *ret = (CAGradientLayer *) [footerBarLayer sublayerWithName: @"footerShineLayer"];
+    if (ret == nil) {
+        ret = [CAGradientLayer layer];
+        ret.name = @"footerShineLayer";
+        [self.footerBarLayer addSublayer: ret];
+        [ret superConstrain];
+        ret.delegate = [DPLayerDelegate sharedDelegate];
     }
     return ret;
 }

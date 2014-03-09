@@ -16,6 +16,11 @@
     [super awakeFromNib];
 }
 
+//
+//- (id) contentView {
+//    return self.contentContentView;
+//}
+
 
 - (void) setTitleBarView: (NSView *) titleBarView1 {
     if (titleBarView && titleBarView.superview) {
@@ -118,8 +123,6 @@
 
     }
 }
-
-
 
 
 @end

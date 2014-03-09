@@ -6,11 +6,11 @@
 #import <DPWindow/DPStyledWindow.h>
 
 @interface DPHeaderedWindow : DPStyledWindow {
-    NSView *titleBarView;
-    NSView *footerBarView;
+    IBOutlet  NSView *titleBarView;
+    IBOutlet  NSView *footerBarView;
 }
 
-@property(nonatomic, retain) NSView *titleBarView;
+@property(nonatomic, strong) NSView *titleBarView;
 @property(nonatomic, strong) NSView *footerBarView;
 
 @end
