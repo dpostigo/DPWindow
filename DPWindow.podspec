@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "DPWindow"
-  s.version      = "0.0.3"
+  s.version      = "0.0.4"
   s.summary      = "In development."
   s.homepage     = "http://dpostigo.com"
   s.license      = 'BSD'
@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.frameworks   = 'QuartzCore'
   s.requires_arc = true
 
-  s.dependency   'CALayer-DPUtils', '~> 0.1.3'
+  s.dependency   'CALayer-DPUtils'
   s.dependency   'NSView-DPAutolayout'
   s.dependency   'NSColor-BlendingUtils'
 
